@@ -7,10 +7,10 @@ export default function Navbar({ navBackground }) {
   const [{ userInfo }] = useStateProvider();
   return (
     <Container navBackground={navBackground}>
-      <div className="search__bar">
-        <FaSearch />
-        <input type="text" placeholder="Artists, songs, or podcasts" />
-      </div>
+        <div className="search__bar">
+            <FaSearch />
+            <input type="text" placeholder="Artists, songs, or podcasts" />
+        </div>
       <div className="avatar">
         <a href={userInfo?.userUrl}>
           <CgProfile />
@@ -52,11 +52,11 @@ const Container = styled.div`
   .avatar {
     background-color: black;
     padding: 0.3rem 0.4rem;
-    padding-right: 1rem;
     border-radius: 2rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: right;
+    position: fixed;
+    right: 2rem;
     a {
       display: flex;
       justify-content: center;
