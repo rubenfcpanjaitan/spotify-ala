@@ -1,16 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useStateProvider } from "../helper/StateProvider";
-import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 export default function Navbar({ navBackground }) {
   const [{ userInfo }] = useStateProvider();
   return (
     <Container navBackground={navBackground}>
-        <div className="search__bar">
-            <FaSearch />
-            <input type="text" placeholder="Artists, songs, or podcasts" />
-        </div>
       <div className="avatar">
         <a href={userInfo?.userUrl}>
           <CgProfile />
@@ -52,11 +47,11 @@ const Container = styled.div`
   .avatar {
     background-color: black;
     padding: 0.3rem 0.4rem;
-    border-radius: 2rem;
+    border-radius: 1rem;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     position: fixed;
-    right: 2rem;
+    right: 5rem;
     a {
       display: flex;
       justify-content: center;

@@ -1,99 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
-import Sidebar from "./Sidebar";
+import React from 'react';
 import styled from "styled-components";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
-import axios from "axios";
-import { useStateProvider } from "../helper/StateProvider";
-import Body from "./Body";
-import { reducerCases } from "../helper/Constants";
+import { FaSearch } from "react-icons/fa";
 
-export default function Search() {
-    const [{ token }, dispatch] = useStateProvider();
-    const [navBackground, setNavBackground] = useState(false);
-    const [headerBackground, setHeaderBackground] = useState(false);
-    const bodyRef = useRef();
-    const bodyScrolled = () => {
-        bodyRef.current.scrollTop >= 30
-            ? setNavBackground(true)
-            : setNavBackground(false);
-        bodyRef.current.scrollTop >= 268
-            ? setHeaderBackground(true)
-            : setHeaderBackground(false);
-    };
-    useEffect(() => {
-        const getUserInfo = async () => {
-            const { data } = await axios.get("https://api.spotify.com/v1/me", {
-                headers: {
-                    Authorization: "Bearer " + token,
-                    "Content-Type": "application/json",
-                },
-            });
-            const userInfo = {
-                userId: data.id,
-                userUrl: data.external_urls.spotify,
-                name: data.display_name,
-            };
-            dispatch({ type: reducerCases.SET_USER, userInfo });
-        };
-        getUserInfo();
-    }, [dispatch, token]);
-    useEffect(() => {
-        const getPlaybackState = async () => {
-            const { data } = await axios.get("https://api.spotify.com/v1/me/player", {
-                headers: {
-                    Authorization: "Bearer " + token,
-                    "Content-Type": "application/json",
-                },
-            });
-            dispatch({
-                type: reducerCases.SET_PLAYER_STATE,
-                playerState: data.is_playing,
-            });
-        };
-        getPlaybackState();
-    }, [dispatch, token]);
+export default function Search({ searchBackground }) {
     return (
-        <Container>
-            <div className="spotify__body">
-                <Sidebar />
-                <div className="body" ref={bodyRef} onScroll={bodyScrolled}>
-                    <Navbar navBackground={navBackground} />
-                    <div className="body__contents">
-                        <Body headerBackground={headerBackground} />
-                    </div>
-                </div>
-            </div>
-            <div className="spotify__footer">
-                <Footer />
+        <Container searchBackground={searchBackground}>
+            <div className="search__bar">
+                <FaSearch />
+                <input type="text" placeholder="Artists, songs, or podcasts" />
             </div>
         </Container>
     );
 }
 
 const Container = styled.div`
-  max-width: 100vw;
-  max-height: 100vh;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: 85vh 15vh;
-  .spotify__body {
-    display: grid;
-    grid-template-columns: 15vw 85vw;
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 1));
-    background-color: rgb(60, 73, 82);
-    .body {
-      height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  height: 5vh;
+  position: sticky;
+  top: 0;
+  transition: 0.3s ease-in-out;
+  background-color: ${({ navBackground }) =>
+    navBackground ? "rgba(0,0,0,0.7)" : "none"};
+  .search__bar {
+    background-color: white;
+    width: 30%;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    input {
+      border: none;
+      height: 2rem;
       width: 100%;
-      overflow: auto;
-      &::-webkit-scrollbar {
-        width: 0.7rem;
-        max-height: 2rem;
-        &-thumb {
-          background-color: rgba(255, 255, 255, 0.6);
-        }
+      &:focus {
+        outline: none;
       }
     }
   }

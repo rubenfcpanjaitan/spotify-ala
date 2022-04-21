@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { MdHomeFilled, MdSearch,MdSmartDisplay } from "react-icons/md";
-import { IoLibrary,IoAdd } from "react-icons/io5";
+import { IoAdd } from "react-icons/io5";
 import Playlists from "./Playlists";
-export default function Sidebar() {
+
+export default function Sidebar({ handleHome, handleSearch, handleCreatePlaylist }) {
   return (
     <Container>
       <div className="top__links">
@@ -14,21 +15,17 @@ export default function Sidebar() {
           </span>
         </div>
         <ul>
-          <li>
+          <li onClick={handleHome}>
             <MdHomeFilled />
             <span>Home</span>
           </li>
-          <li >
+          <li onClick={handleSearch}>
             <MdSearch />
             <span>Search</span>
           </li>
-          <li>
+          <li onClick={handleCreatePlaylist}>
             <IoAdd />
             <span>Create Playlist</span>
-          </li>
-          <li>
-            <IoLibrary />
-            <span>Your Playlist</span>
           </li>
         </ul>
       </div>
@@ -36,6 +33,8 @@ export default function Sidebar() {
     </Container>
   );
 }
+
+
 
 const Container = styled.div`
   background-color: black;

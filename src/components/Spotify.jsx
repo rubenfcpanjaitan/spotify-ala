@@ -7,11 +7,17 @@ import axios from "axios";
 import { useStateProvider } from "../helper/StateProvider";
 import Body from "./Body";
 import { reducerCases } from "../helper/Constants";
+import Search from "./Search";
+import CreatePlaylist from "./CreatePlaylist";
 
 export default function Spotify() {
   const [{ token }, dispatch] = useStateProvider();
   const [navBackground, setNavBackground] = useState(false);
   const [headerBackground, setHeaderBackground] = useState(false);
+  const [homeBackground, setHomeBackground] = useState(true);
+  const [searchBackground, setSearchBackground] = useState(false);
+  const [createPlaylistBackground, setCreatePlaylistBackground] = useState(false);
+
   const bodyRef = useRef();
   const bodyScrolled = () => {
     bodyRef.current.scrollTop >= 30
@@ -38,6 +44,7 @@ export default function Spotify() {
     };
     getUserInfo();
   }, [dispatch, token]);
+
   useEffect(() => {
     const getPlaybackState = async () => {
       const { data } = await axios.get("https://api.spotify.com/v1/me/player", {
@@ -53,14 +60,38 @@ export default function Spotify() {
     };
     getPlaybackState();
   }, [dispatch, token]);
+
+  function handleHome(){
+    console.log("Menu Home")
+    setHomeBackground(true);
+    setSearchBackground(false)
+    setCreatePlaylistBackground(false)
+  }
+
+  function handleSearch(){
+    console.log("Menu Search")
+    setHomeBackground(false);
+    setSearchBackground(true)
+    setCreatePlaylistBackground(false)
+  }
+
+  function handleCreatePlaylist(){
+    console.log("Menu Create PlayList")
+    setHomeBackground(false);
+    setSearchBackground(false)
+    setCreatePlaylistBackground(true)
+  }
+
   return (
     <Container>
       <div className="spotify__body">
-        <Sidebar />
+        <Sidebar handleHome={handleHome} handleSearch={handleSearch} handleCreatePlaylist={handleCreatePlaylist}/>
         <div className="body" ref={bodyRef} onScroll={bodyScrolled}>
           <Navbar navBackground={navBackground} />
           <div className="body__contents">
-            <Body headerBackground={headerBackground} />
+            {homeBackground? <Body homeBackground={true} />:null}
+            {searchBackground ?<Search searchBackground={true}/>:null}
+            {createPlaylistBackground ?<CreatePlaylist createPlaylistBackground={true}/>:null}
           </div>
         </div>
       </div>
