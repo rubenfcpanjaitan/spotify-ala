@@ -18,7 +18,7 @@ export default function Sidebar() {
             <MdHomeFilled />
             <span>Home</span>
           </li>
-          <li onClick={handleSearch}>
+          <li >
             <MdSearch />
             <span>Search</span>
           </li>
