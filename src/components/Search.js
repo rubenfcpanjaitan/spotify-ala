@@ -3,10 +3,18 @@ import { FaSearch } from "react-icons/fa";
 import { getSongList } from "../service/spotify";
 import { useEffect, useRef, useState } from "react";
 import { AiFillClockCircle, AiOutlineMenu, AiFillPlusCircle } from "react-icons/ai";
+import axios from 'axios';
+import { useStateProvider } from "../helper/StateProvider";
+import { reducerCases } from "../helper/Constants";
 
 
 export default function Search({ searchBackground }) {
   const [selectedPlaylist, setSelectedPlaylist] = useState("");
+  const [{ token, selectedPlaylistId }, dispatch] = useStateProvider();
+  const [track, setTrack] = useState({
+    uris: [],
+    position: 0
+  })
 
     const handleSubmit = e => {
       if(e.keyCode == 13){
@@ -25,6 +33,7 @@ export default function Search({ searchBackground }) {
               duration: track.duration_ms,
               album: track.album.name,
               context_uri: track.album.uri,
+              track_uri: track.uri,
               track_number: track.track_number,
             })),
           };
@@ -34,14 +43,57 @@ export default function Search({ searchBackground }) {
     };
 
     useEffect(() => {
-      console.log(selectedPlaylist);
-    });
+      track.uris.length && addItemToPlaylist()
+    },[track]);
+
+    const addItemToPlaylist = async () => {
+      const response =  await axios({
+        method: "POST",
+        url: `https://api.spotify.com/v1/playlists/${selectedPlaylistId}/tracks`,
+        data: track,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+
+      if (response.snapshot_id) {
+        await getPlaylistData()
+      }
+    }
+
+    const getPlaylistData = async () => {
+      const response = await axios.get(
+        "https://api.spotify.com/v1/me/playlists",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const { items } = response.data;
+      const playlists = items.map(({ name, id }) => {
+        return { name, id };
+      });
+      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+    };
           
     const msToMinutesAndSeconds = (ms) => {
       var minutes = Math.floor(ms / 60000);
       var seconds = ((ms % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
     };
+
+    const handleTrack = (uri) => {
+      setTrack({
+        ...track,
+        uris: [
+          ...track.uris,
+          uri
+        ]
+      })
+    }
   
     return (
         <Container searchBackground={searchBackground}>
@@ -81,8 +133,7 @@ export default function Search({ searchBackground }) {
                           image,
                           duration,
                           album,
-                          context_uri,
-                          track_number,
+                          track_uri,
                         },
                         index
                       ) => {
@@ -120,7 +171,10 @@ export default function Search({ searchBackground }) {
                               <span>{msToMinutesAndSeconds(duration)}</span>
                             </div>
                             <div className="col-center">
-                                <span>
+                                <span
+                                  onClick={() => handleTrack(track_uri)}
+                                  style={{ cursor: "pointer" }}
+                                >
                                   <AiFillPlusCircle size={24}/>
                                 </span>
                             </div>

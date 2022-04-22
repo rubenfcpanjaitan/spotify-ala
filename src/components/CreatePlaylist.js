@@ -4,7 +4,7 @@ import axios from "axios";
 import { useStateProvider } from "../helper/StateProvider";
 import { reducerCases } from "../helper/Constants";
 
-export default function CreatePlaylist({ createPlaylistBackground }) {
+export default function CreatePlaylist({ createPlaylistBackground, handleSearch }) {
   const [{ userInfo, token }, dispatch] = useStateProvider();
   const [newPlaylist, setNewPlaylist] = useState({
     "name": "",
@@ -23,11 +23,7 @@ export default function CreatePlaylist({ createPlaylistBackground }) {
       },
     })
     await getPlaylistData()
-    setNewPlaylist({
-      "name": "",
-      "description": "",
-      "public": false
-    })
+    handleSearch()
   };
 
   const getPlaylistData = async () => {

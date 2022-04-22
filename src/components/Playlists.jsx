@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { reducerCases } from "../helper/Constants";
 import { useStateProvider } from "../helper/StateProvider";
 
-export default function Playlists() {
+export default function Playlists({ handlePlaylist }) {
   const [{ token, playlists }, dispatch] = useStateProvider();
   useEffect(() => {
     const getPlaylistData = async () => {
@@ -33,7 +33,10 @@ export default function Playlists() {
       <ul>
         {playlists.map(({ name, id }) => {
           return (
-            <li key={id} onClick={() => changeCurrentPlaylist(id)}>
+            <li key={id} onClick={() => {
+              changeCurrentPlaylist(id)
+              handlePlaylist()
+            }}>
               {name}
             </li>
           );
