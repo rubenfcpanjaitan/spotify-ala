@@ -45,6 +45,7 @@ export default function CreatePlaylist({ createPlaylistBackground }) {
       return { name, id };
     });
     dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
+      createPlaylistBackground = false
   };
 
   function handleChange(evt) {
@@ -56,7 +57,7 @@ export default function CreatePlaylist({ createPlaylistBackground }) {
   }
 
     return (
-        <Container>
+        <Container createPlaylistBackground={createPlaylistBackground}>
             <div className="row">
                 <h1 className="title">Tambahkan Playlist</h1>
             </div>
@@ -83,7 +84,7 @@ export default function CreatePlaylist({ createPlaylistBackground }) {
                     <button onClick={createNewPlaylist}  style={{
                         padding: '0.55rem 2rem',
                         fontSize: '16px',
-                        backgroundColor: 'green',
+                        backgroundColor: '#49f585',
                         borderRadius: '2rem',
                         outline: 'none',
                         cursor: 'pointer',
