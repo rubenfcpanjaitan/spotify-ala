@@ -1,20 +1,21 @@
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
-import { getSongList } from "../service/spotify";
-import { useEffect, useRef, useState } from "react";
-import { AiFillClockCircle, AiOutlineMenu, AiFillPlusCircle } from "react-icons/ai";
-
+import { getSongList, addItemToPlaylist } from "../service/spotify";
+import { useState } from "react";
+import { AiFillClockCircle, AiFillPlusCircle } from "react-icons/ai";
+import { useStateProvider } from "../helper/StateProvider";
 
 export default function Search({ searchBackground }) {
+  const [{ token, selectedPlaylistId }, dispatch] = useStateProvider();
   const [selectedPlaylist, setSelectedPlaylist] = useState("");
 
     const handleSubmit = e => {
-      if(e.keyCode == 13){
+      if(e.keyCode === 13){
         var value = e.target.value
         var token = window.localStorage.getItem("token");
     
         getSongList(token, value).then((res) => {
-          const tes = {
+          const data = {
             id: res.id,
             name: res.name,
             tracks: res.tracks.items.map(( track ) => ({
@@ -26,16 +27,17 @@ export default function Search({ searchBackground }) {
               album: track.album.name,
               context_uri: track.album.uri,
               track_number: track.track_number,
+              uri: track.uri,
             })),
           };
-          setSelectedPlaylist(tes)
+          setSelectedPlaylist(data)
         });
      }
     };
-
-    useEffect(() => {
-      console.log(selectedPlaylist);
-    });
+    
+    const handleAdd = (uri) => {
+        addItemToPlaylist(selectedPlaylistId,token,uri).then((res) => console.log(res))
+    };
           
     const msToMinutesAndSeconds = (ms) => {
       var minutes = Math.floor(ms / 60000);
@@ -83,6 +85,7 @@ export default function Search({ searchBackground }) {
                           album,
                           context_uri,
                           track_number,
+                          uri,
                         },
                         index
                       ) => {
@@ -119,10 +122,10 @@ export default function Search({ searchBackground }) {
                             <div className="col">
                               <span>{msToMinutesAndSeconds(duration)}</span>
                             </div>
-                            <div className="col-center">
-                                <span>
-                                  <AiFillPlusCircle size={24}/>
-                                </span>
+                            <div className="col-center">                          
+                                  <span>
+                                    <AiFillPlusCircle size={24} onClick={() => handleAdd(uri)}/>
+                                  </span>
                             </div>
                           </div>
                         );
