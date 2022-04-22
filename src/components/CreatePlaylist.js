@@ -41,7 +41,6 @@ export default function CreatePlaylist({ createPlaylistBackground, handleSearch 
       return { name, id };
     });
     dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
-      createPlaylistBackground = false
   };
 
   function handleChange(evt) {
@@ -53,7 +52,7 @@ export default function CreatePlaylist({ createPlaylistBackground, handleSearch 
   }
 
     return (
-        <Container createPlaylistBackground={createPlaylistBackground}>
+        <Container>
             <div className="row">
                 <h1 className="title">Tambahkan Playlist</h1>
             </div>
