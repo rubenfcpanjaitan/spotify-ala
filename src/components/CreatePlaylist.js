@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import axios from "axios";
-import { FaSearch } from "react-icons/fa";
-import {BsTextarea} from "react-icons/bs";
 import { useStateProvider } from "../helper/StateProvider";
 import { reducerCases } from "../helper/Constants";
 
@@ -78,7 +76,16 @@ export default function CreatePlaylist({ createPlaylistBackground, handleSearch 
                     </div>
                 </div>
                 <div className="column">
-                    <button onClick={createNewPlaylist}>ADD</button>
+                    <button onClick={createNewPlaylist}  style={{
+                        padding: '0.55rem 2rem',
+                        fontSize: '16px',
+                        backgroundColor: 'green',
+                        borderRadius: '2rem',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                    }}>Tambahkan
+                    </button>
                 </div>
             </div>
         </Container>
