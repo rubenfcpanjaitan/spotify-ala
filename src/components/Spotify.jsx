@@ -68,6 +68,13 @@ export default function Spotify() {
     setCreatePlaylistBackground(false)
   }
 
+  function handlePlaylist(){
+    console.log("Menu Playlist")
+    setHomeBackground(true);
+    setSearchBackground(false)
+    setCreatePlaylistBackground(false)
+  }
+
   function handleSearch(){
     console.log("Menu Search")
     setHomeBackground(false);
@@ -85,13 +92,13 @@ export default function Spotify() {
   return (
     <Container>
       <div className="spotify__body">
-        <Sidebar handleHome={handleHome} handleSearch={handleSearch} handleCreatePlaylist={handleCreatePlaylist}/>
+        <Sidebar handleHome={handleHome} handlePlaylist={handlePlaylist} handleSearch={handleSearch} handleCreatePlaylist={handleCreatePlaylist}/>
         <div className="body" ref={bodyRef} onScroll={bodyScrolled}>
           <Navbar navBackground={navBackground} />
           <div className="body__contents">
             {homeBackground? <Body homeBackground={true} />:null}
             {searchBackground ?<Search searchBackground={true}/>:null}
-            {createPlaylistBackground ?<CreatePlaylist createPlaylistBackground={true}/>:null}
+            {createPlaylistBackground ?<CreatePlaylist handleSearch={handleSearch} createPlaylistBackground={true}/>:null}
           </div>
         </div>
       </div>

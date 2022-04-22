@@ -4,7 +4,7 @@ import { MdHomeFilled, MdSearch,MdSmartDisplay } from "react-icons/md";
 import { IoAdd } from "react-icons/io5";
 import Playlists from "./Playlists";
 
-export default function Sidebar({ handleHome, handleSearch, handleCreatePlaylist }) {
+export default function Sidebar({ handleHome, handleSearch, handleCreatePlaylist, handlePlaylist }) {
   return (
     <Container>
       <div className="top__links">
@@ -29,7 +29,7 @@ export default function Sidebar({ handleHome, handleSearch, handleCreatePlaylist
           </li>
         </ul>
       </div>
-      <Playlists />
+      <Playlists handlePlaylist={handlePlaylist}/>
     </Container>
   );
 }
