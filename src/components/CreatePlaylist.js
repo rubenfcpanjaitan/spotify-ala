@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
-import {BsTextarea} from "react-icons/bs";
+import { createPlaylist } from "../service/spotify";
+import { useStateProvider } from "../helper/StateProvider";
+
 
 export default function CreatePlaylist({ createPlaylistBackground }) {
+    const [{ token, selectedPlaylistId, userInfo }, dispatch] = useStateProvider();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+
+    const handleSubmit = e => {
+      if(e.keyCode === 13){
+        let id = userInfo?.userId
+        let payload = {
+          name: name,
+          description: description,
+        };
+        createPlaylist(id, token, payload).then((res) => console.log(res))
+      }
+    }
+
     return (
         <Container>
             <div className="row">
@@ -12,12 +28,12 @@ export default function CreatePlaylist({ createPlaylistBackground }) {
             <div className="row">
                 <div className="column">
                     <div className={"input_playlist"}>
-                        <input name="playlist" placeholder={"nama playlist"}></input>
+                        <input name="playlist" placeholder={"nama playlist"} onChange={e => setName(e.target.value)} />
                     </div>
                 </div>
                 <div className="column">
                     <div className={"input_playlist"}>
-                        <input name={"deskripsi"} placeholder={"Deskripsi"}></input>
+                        <input name={"deskripsi"} placeholder={"Deskripsi"} onChange={e => setDescription(e.target.value)} onKeyDown={handleSubmit} /> 
                     </div>
                 </div>
             </div>
